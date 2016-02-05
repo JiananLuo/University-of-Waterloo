@@ -1,4 +1,0 @@
-zip a4q3a.zip *
-sleep 1
-source /u/cs246/setup
-marmoset_submit cs246 a4q3a a4q3a.zip
