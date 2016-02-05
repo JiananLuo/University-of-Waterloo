@@ -1,0 +1,40 @@
+By submitting this text file to Marmoset, you acknowledge and agree 
+that you have read the Guidelines.pdf document provided to you and 
+that you will meet the following deadlines and requirements for 
+assignment 5. Late documents will not be accepted after the listed 
+due dates. Failure to meet requirements will lead to non-negotiable 
+and severe penalties. 
+
+The deadlines.txt file must be submitted to have your final project 
+marked.
+
+Requirements:
+- All deadlines are met
+- Files ares submitted to the correct project on Marmoset
+- The final project will be demoed with at least one partner present
+- The final project must be able to run without any bonus features. 
+A text based mode is mandatory for all projects.
+- The final project must be able to read in a saved file with the 
+exact specifications as provided in your project's specifications.
+
+Friday July 17:
+- First UML (a5-uml on Marmoset)
+- One PDF to the appropriate project on Marmoset containing
+  - Plan of attack
+  - Answers to all questions in your project’s specifications document
+- deadlines.txt to appropriate Marmoset project
+
+Friday July 24:
+- Select a demo time slot
+
+Tuesday July 28:
+- Submit all required source files to the appropriate project on 
+Marmoset. Download the submitted file from Marmoset and ensure it 
+compiles and runs correctly to ensure all required files were submitted. 
+Should contain:
+  - Header files
+  - Source code file
+  - Any required text files
+  - Appropriate Makefile for your project
+- Final UML (a5-uml-final on Marmoset)
+- Design document (a5-design on Marmoset)

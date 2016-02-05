@@ -1,0 +1,240 @@
+Total: __________________/75
+
+Bonus: __________________/10
+
+
+General: _________/3
+
+___ Program includes a Makefile
+
+___ Program compiles and runs
+
+___ Program exits properly with no input supplied
+
+
+
+
+Text Display: ___/6
+
+Note to marker: The following can be tested by just displaying the board once
+
+___ Alternate board tiles displayed. 
+    ' '(blank space) for white tiles, '_' (underscore) for dark tiles.
+
+___ even rows start with white tiles, odd rows start with black tiles.
+
+___/4 Correct representation of pieces
+
+    * ___/0.5 r for rook
+
+    * ___/0.5 n for knight
+
+    * ___/0.5 b for bishop
+
+    * ___/0.5 q for queen
+
+    * ___/0.5 k for king
+
+    * ___/0.5 p for pawn
+
+    * ___/1 capital letters for white pieces, lower case letters denote black pieces
+
+
+
+Command Line Options: ___________/3
+
+___ Command line argument reads board from specified 
+    (run program with: ./pp9k board.arg)
+
+___ File read in allows the king in check
+    (run program with: ./pp9k board-check.arg)
+
+___ White/Black's turn handled correctly as specified in input file
+
+
+THE FOLLOWING WILL NOT BE TESTED  IF COMMAND LINE OPTION TO LOAD A PRE-SAVED GAME DOES NOT WORK.
+_______________________________________________________________________
+
+
+
+Interaction (Command Interpreter): _________/15
+
+___ game human human is functional
+
+___ game human computer[1-4] is functional
+
+___ game computer[1-4] human is functional
+
+___ game computer[1-4] computer[1-4] is functional
+
+    Note to marker: randomly testing one of [1-4] is okay.
+    e.g. game computer2 human (choose different random number each time)
+
+___ resign is functional
+
+___ If current player is human, able to move pieces using 
+    move <location1> <location2>
+
+___ If current player is computer, able to allow computer move
+    using move
+
+___ after a move, board should be redisplayed
+
+___ Can play again after game ends
+
+___/6 setup mode:
+
+    * ___ setup enters the setup mode
+
+    * ___ + <piece> <location that has pieces> replaces the
+          piece at that location
+
+    * ___ + command redisplays the board
+
+    * ___ - <location that has pieces> removes the piece on
+          that location
+
+    * ___/2 done will end the setup mode ONLY in following 
+            conditions:
+
+        ** ___ exactly one white king (K) and exactly one black
+               king (k) is present
+
+        ** ___/0.5 no kings are in check
+
+        ** ___/0.5 no pawns are on first or last row of board
+
+____ program ends at the end of input
+
+
+
+
+Game Rules: ___/23
+
+___ Pawn default move is correct
+
+___ Two-square initial pawn move is correct
+
+___ Pawn capturing move is correct
+
+___ En passant is correct
+    (Command: ./pp9k enpassant.arg)
+
+___ En passant not permitted if delayed
+    (Command: ./pp9k enpassant.arg)
+
+___ Knight move is correct
+
+___ Rook move is correct
+
+___ Bishop move is correct
+
+___ Queen move is correct
+
+___ Rook, Bishop, Queen cannot move past a piece that blocks their path
+    (e.g. try moving them right at start of the game, should be all invalid
+    moves since pawns block their path)
+
+___ King move is correct
+
+___ Capturing is correct
+
+___ Correctly detects when King is in check and displays appropriate message
+    (“White is in check." or "Black is in check.”)
+    (Command: ./pp9k check1.arg)
+
+___ Detects discovered check (i.e. moving one piece unveils check by another)
+    (Command: ./pp9k check2.arg)
+
+___ Castling is correctly implemented
+    (Command: ./pp9k board-castling.arg)
+    Note: Make sure to test short and long castling
+
+___ Castling not permitted if king or rook have moved
+    (Command: ./pp9k board-castling.arg)
+    Note: Move the King or Rook first, then move it back to original position.
+          Castling should be invalid.
+
+___ Can't castle when in check, or through check
+    (Command: ./pp9k castling-invalid.arg)
+    Note: make white rook (R) move to the right to check, 
+          then attept castle in black player's turn.
+
+___ Can't make any move that puts own king in check
+    (Command: ./pp9k check3.arg)
+    Only valid move for black king is to move right.
+
+___ When king is in check, can only make moves that get him out of check
+    (Command: ./pp9k check4.arg)
+
+___ The program detects if an illegal move is made.
+    (Command: ./pp9k invalid.arg)
+    Note: try to move the white bishop and white Knight vertically and horizontally.
+
+
+___ Detects checkmate and correctly displays 
+    "Checkmate! White wins!" or "Checkmate! Black wins!" 
+    (Command: ./pp9k checkmate-white.arg
+            move white queen (Q) to h5)
+
+___ Detects stalemate and correctly displays “Stalemate!”
+    (Command: ./pp9k stalemate.arg
+            move white queen (Q) to e6)
+
+___ Correct score reported at end of game
+    (Scoring scheme: +1 for winner, +0 for loser, +0.5 for both sides in a draw)
+
+
+
+Computer players: ____________/13
+
+___/7 Different levels of computer AI are present:
+        ___/1 Level 1: random legal moves (should scan through code).
+
+        ___/2 Level 2: prefers capturing moves and checks over other moves 
+                       (should scan through code).
+
+        ___/2 Level 3: prefers avoiding capture, capturing moves, and checks. 
+                       (should scan through code)
+
+        ___/2 Levels 4+: something more sophisticated.
+                    (scan through code and ask group to explain what it is and show that it works)
+
+          Brief description of Lvl 4:_______________________________________
+
+          __________________________________________________________________
+          (a description MUST be given for awarding marks for level 4)
+
+___ Computer player can handle pawn promotion (OK if Q always chosen)
+
+___/5 -1 mark for computer player making an invalid move
+      (Up to 5 marks)
+
+
+
+Graphics: __________/8
+
+___ Graphics display contains all needed elements (board, coordinates, pieces)
+
+___ White/black pieces distinguished, and are visible on both white and black
+    squares
+
+___ Graphics display displays check/checkmate/stalemate message
+
+___/2 Graphics display of board matches text display
+
+___/2 Graphics display correctly moves pieces
+
+___ Graphics window is not completely redrawn on every move
+
+
+Exiting the Program: _______/4
+
+___/2 Program leaks only a modest amount of memory (due to Xlib)
+
+___/2 No segfaults throughout entire demo (even if accidental invalid input)
+    (-1 mark for each segfault)
+
+
+
+Bonus: (Note to marker: please be descriptive and indicate level of difficulty. Difficulty numbers should be filled once the group has left to avoid arguments. 1 - easy and 10 - very difficult):

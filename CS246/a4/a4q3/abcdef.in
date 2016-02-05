@@ -1,0 +1,10 @@
+abcdef.txt dropfirst 0
+abcdef.txt dropfirst 5
+abcdef.txt dropfirst 6
+abcdef.txt dropfirst 7
+abcdef.txt doublewords
+abcdef.txt count a
+abcdef.txt count A
+abcdef.txt count g
+abcdef.txt count G
+abcdef.txt allcaps

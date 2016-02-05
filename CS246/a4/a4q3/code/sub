@@ -1,0 +1,4 @@
+zip a4q3b.zip *.cc *.h Makefile
+sleep 1
+source /u/cs246/setup
+marmoset_submit cs246 a4q3b a4q3b.zip

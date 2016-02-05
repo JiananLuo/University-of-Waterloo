@@ -1,0 +1,10 @@
+sample
+sample2
+noOpera
+num
+a10
+a10cc
+self
+dd
+stdE
+stdDD

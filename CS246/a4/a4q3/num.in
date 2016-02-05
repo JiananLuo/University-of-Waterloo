@@ -1,0 +1,7 @@
+num.txt dropfirst 0
+num.txt dropfirst 5
+num.txt doublewords
+num.txt count a
+num.txt count 1
+num.txt count 5
+num.txt allcaps

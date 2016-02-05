@@ -1,0 +1,177 @@
+
+Total: __________/68
+
+Bonus: __________/10
+
+General: __/11
+
+___ Program includes a Makefile
+
+___ Program compiles and runs
+
+___ Program displays initial board
+
+___ Board displays current level
+
+___ Board displays current score
+
+___ Current level and score are updated correctly
+
+___ Player is asked to choose a race
+
+___ Each race can be selected
+
+___ Each race has appropriate starting statistics
+
+___ PC and stairs never spawn in same room
+
+___ Pre-generated floors can be read and used from file provided on command line
+
+
+Movement: __/7
+
+___ Can move in all directions
+
+___ Can move diagonally around corners
+
+___ Cannot move outside the bounds of a chamber
+
+___ Enemies move whenever a valid command is issued
+
+___ Cannot move outside the bounds of a passage
+
+___ Enemies, the PC, Gold, and Potions can never occupy the same floor tile.
+    The only exception is the PC can walk over a tile with a dragon hoard as
+    long as the associated dragon is alive, but PC still cannot pick up the gold
+    until the dragon is dead.  This exception is optional, so either behaviour
+    is acceptable.
+
+___ Stairs move PC to new floor (either newly generated or from the provided file)
+
+
+Command Line Argument: __/2
+
+__ Program can load a file specified as a command line argument. If no argument is
+   provided the program creates the floors with random item placements
+
+
+THE FOLLOWING WILL NOT BE MARKED IF A LOAD FILE CANNOT BE READ AS A COMMAND LINE
+ARGUMENT
+__________________________________________________________________________________
+
+
+Potions: __/8
+
+___ Can use Potion in any of the cardinal directions (potions.txt)
+
+___/3 Each potion has the correct effect on the PC (0.5/potion)
+
+___ Achieving an HP of 0 causes player to lose game via potions
+
+___ Atk/Def cannot drop below 0 (lowattack.txt and lowdefence.txt)
+
+___ Potions are unknown until they are used once
+
+___ Potion effects (for Atk and Def) disappear when transitioning levels
+
+
+Combat: __/12
+
+___ PC can attack in any direction
+
+___ PC can be attacked by more than one enemy at once.
+
+___ Achieving an HP of 0 causes player to lose game via combat
+
+___ Merchants should not attack the PC initially
+
+___/2 After slaying a Merchant all other merchants should become hostile
+(both in this level (1pt) and further levels (1pt)) (merchant.txt)
+
+___ Enemies, except Merchant, are hostile to the PC and attack whenever possible
+
+___ Dragon is hostile when PC is next to Dragon or Dragon Horde (dragon.txt)
+
+___ Damage is correctly calculated to the PC
+
+___ Damage is correctly calculated to Enemies (may need to check code to double check enemies)
+
+___ Ensure that Enemies have a 50% chance not to hit PC (may need to check source)
+
+___ PC never misses a valid attack, unless attacking a halfling. (may need to
+	check source - but should be able to determine while playing) 
+	Note: Valid means an enemy is there
+
+
+Gold: __/3
+
+___ Gold is picked up when the PC walks on it (except Dragon Horde if the Dragon is alive)
+	Can be picked up in any direction (gold.txt)
+
+___ Dragon Horde cannot be picked up until Dragon is slain (0.5 before, 0,5 after)
+
+___ Slaying a Merchant drops a Merchant Horde (check score after slaying a merchant)
+    
+
+Specialization: __/9
+
+___ Drow: potions have x1.5 effect
+
+___ Vampire: gains 5 HP per attack, no max HP
+
+___ Troll: gains 5 HP per turn, max HP is 120
+
+___ Goblin: gains 5 extra gold per enemy slain
+
+___ Human: drops 2 normal piles of gold
+
+___ Dwarf: if Vampire attacks, Vampire loses 5 HP
+
+___ Elf: attacks enemy twice (except Drow)
+
+___ Orc: does 50% more damage to goblin
+
+___ Halfling: PC misses attacking Halfling 50% of the time
+
+
+Generation: __/9
+
+___ All enemies can be generated
+
+___ 10 potions are generated per floor*
+
+___ Potion generation follows prescribed distribution (may need to check code)
+
+___ 10 treasure piles are generated per floor*
+
+___ Treasure generation follows prescribed distribution (may need to check code)
+
+___ 20 enemies (do not count Dragons) are generated per floor*
+
+___ Enemy generation follows prescribed distribution (may need to check code)
+
+___ Order of generation occurs as set out in design specification (may need to check code)
+
+___ Enemies, Gold, and Potions only spawn on floor tiles
+
+* Unless floor comes from input file
+
+Ending the Game: __/7
+
+___ Quit works
+
+___ Restart works (should prompt for a new race)
+
+___ If the player restarts, or the PC dies, or reaches the end of floor 5
+    then the game should prompt the player to quit or select a race
+    Note: Prompting for a new race by itself is fine
+    
+___ Program leaks only a modest amount of memory (apart from libraries)
+
+___ Program leaks no memory (apart from libraries)
+
+__/2 No segfaults throughout entire demo (even if accidental invalid input)
+    (-1 mark for each segfault)
+
+
+Bonus: (Note to marker: please be descriptive and indicate level of difficulty. Difficulty numbers should be filled once the group has left to avoid arguments. 1 - easy and 10 - very difficult):
