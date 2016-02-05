@@ -1,0 +1,11 @@
+source /u/cs241/setup
+g++ wlp4gen.cc
+#cat input | wlp4scan | wlp4parse
+cat input | wlp4scan | wlp4parse | ./a.out
+cat input | wlp4scan | wlp4parse | ./a.out > my.asm
+java cs241.linkasm < my.asm > output.merl
+linker output.merl print.merl alloc.merl > final.merl
+java cs241.merl 0 < final.merl > final.mips
+#java mips.twoints final.mips
+#echo ""
+#wlp4c < input
