@@ -1,0 +1,4 @@
+javac server.java
+javac client.java
+./server.sh 13
+#./client.sh 127.0.0.1 52500 13 'A man, a plan, a canal— Panama!'
