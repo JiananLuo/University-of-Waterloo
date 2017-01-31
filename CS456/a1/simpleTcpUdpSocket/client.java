@@ -7,7 +7,7 @@ public class client {
 		//error inputs
 		if(argv.length != 4)
 		{
-			System.err.println("Wrong number of command line argument");
+			System.err.println("Wrong number of command line argument.");
 			return;
 		}
 
@@ -31,6 +31,14 @@ public class client {
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(TCPClientSocket.getInputStream()));
 		//Read line from server
 		String TCPResponseString = inFromServer.readLine();
+
+		//Check if TCP connection is closed by server, if so, terminate client side
+		if(TCPResponseString == null)
+		{
+			System.err.println("Unmatching reqCode, client terminate.");
+			return;
+		}
+		//If not, parse r_port from server response
 		int rPort = Integer.valueOf(TCPResponseString);
 		//Close TCP connection
 		TCPClientSocket.close();
