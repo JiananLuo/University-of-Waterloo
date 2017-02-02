@@ -1,0 +1,6 @@
+./client.sh 127 52500 13 'A man, a plan, a canal— Panama!'
+./client.sh wocao 52500 13 'A man, a plan, a canal— Panama!'
+./client.sh 127.0.0.1 52501 13 'A man, a plan, a canal— Panama!'
+./client.sh 127.0.0.1 52500 13a 'A man, a plan, a canal— Panama!'
+
+./client.sh 127.0.0.1 52500 13 'A man, a plan, a canal— Panama!'

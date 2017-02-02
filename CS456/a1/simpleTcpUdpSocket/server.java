@@ -1,20 +1,29 @@
 import java.io.*;
 import java.net.*;
+import java.io.IOException;
 
 class server
 {
-	public static void main(String args[]) throws Exception
+	public static void main(String argv[]) throws Exception
 	{
-		//error inputs
-		if(args.length != 1)
+		//error checking for command line argument
+		if(argv.length != 1)
 		{
 			System.err.println("Wrong number of command line argument.");
 			return;
 		}
+		int requestCode;
+		try
+		{
+			requestCode = Integer.valueOf(argv[0]);
+		}
+		catch(Exception e)
+		{
+			System.err.println("Command line argument type error.");
+			return;
+		}
 
-		//when inputs are fine
-		String reqCode = args[0];
-		int requestCode = Integer.valueOf(reqCode);
+		//inputs are fine
 		System.out.println("SERVER_PORT=52500");
 
 		//Create welcoming socket at port 52500

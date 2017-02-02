@@ -1,26 +1,52 @@
 import java.io.*;
 import java.net.*;
+import java.io.IOException;
 
 public class client {
 	public static void main(String argv[]) throws Exception
 	{
-		//error inputs
+		//error checking for command line argument
 		if(argv.length != 4)
 		{
 			System.err.println("Wrong number of command line argument.");
 			return;
 		}
+		int nPort;
+		try
+		{
+			InetAddress.getByName(argv[0]);
+			nPort = Integer.valueOf(argv[1]);
+			Integer.valueOf(argv[2]);
+		}
+		catch(Exception e)
+		{
+			System.err.println("Command line argument type error.");
+			return;
+		}
 
-		//when inputs are fine
+		//inputs are fine
 	//TCP Socket to get the actual port for sending actual msg
-		String serverAddress, nPort, reqCode, msg;
+		String serverAddress, reqCode, msg;
 		serverAddress = argv[0];
-		nPort = argv[1];
 		reqCode = argv[2];
 		msg = argv[3];
-		int port = Integer.valueOf(nPort);
 		//Create client socket, connect to server
-		Socket TCPClientSocket = new Socket(serverAddress, port);
+		Socket TCPClientSocket;
+		try
+		{
+			TCPClientSocket = new Socket(serverAddress, nPort);
+		}
+		catch(ConnectException e)
+		{
+			System.err.println("Connection refused.");
+			System.err.println("Connection to the address: " + serverAddress +  "  Port: " + nPort + " is Unreachable.");
+			return;
+		}
+		catch(Exception e)
+		{
+			System.err.println("No route to host/ip");
+			return;
+		}
 
 		//Create output stream attached to socket
 		DataOutputStream outToServer = new DataOutputStream(TCPClientSocket.getOutputStream());
