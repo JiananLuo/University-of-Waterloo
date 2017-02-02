@@ -1,0 +1,217 @@
+
+@media screen {
+  body {
+    font-size: 100%; 
+  }
+  tr {
+     padding-bottom: 10px;
+  }
+  td {
+   padding: 5px;
+  }
+}
+
+
+@media print {
+  body {
+    font-size: 80%; 
+  }
+  nav {
+    display: none;
+  }
+  tr {
+    padding-bottom: 0px;
+  }
+  td  {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+  }
+}
+/* `Basic HTML
+----------------------------------------------------------------------------------------------------*/
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;  
+}
+
+
+hr {
+  border: 0 #ccc solid;
+  border-top-width: 1px;
+  clear: both;
+  height: 0;
+}
+
+.small {
+	font-size: 11px;
+}
+
+.center {
+	text-align: center;
+}
+
+.selectmenu-popup {
+	text-align: left;
+}
+
+/* `Headings
+----------------------------------------------------------------------------------------------------*/
+
+h1.title {
+  font-weight: normal;
+  font-size: 40px;
+  line-height: 45px;
+  margin-bottom: 0px;
+}
+
+h1.subtitle {
+  font-weight: normal;
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+
+h1 {
+  margin-top: 32px;
+  font-weight: normal;
+  font-size: 32px;
+}
+
+h2 {
+  font-weight: normal;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+h4 {
+  font-weight: normal;
+  font-size: 15px;
+}
+
+h5 {
+  font-size: 17px;
+}
+
+h6 {
+  font-size: 15px;
+}
+
+
+
+/* `Spacing
+----------------------------------------------------------------------------------------------------*/
+
+ol {
+  list-style: decimal;
+}
+
+ul {
+  list-style: square;
+}
+
+li {
+  margin-left: 22px;
+}
+
+dt {
+	font-weight: 600;
+	float:left;
+	margin-left: 10px;
+	padding-right: 10px;
+}
+
+
+dl:before,
+dl:after {
+    content:"";
+    display:table;
+}
+
+dl:after {
+    clear:both;
+	}
+
+#corrections dd {
+  margin-left: 100px;
+}
+
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+table,
+address,
+fieldset,
+figure {
+  margin-bottom: 10px;
+  line-height: 150%;
+}
+
+code {
+  font-family: Consolas, Courier, monospace;
+}
+
+
+/* `Links
+----------------------------------------------------------------------------------------------------*/
+
+a {
+  text-decoration: none;
+  color: #007EFF;
+}
+
+a:hover {
+  color: #007EFF;
+  text-decoration: underline;
+}
+
+a:visited {
+  text-decoration: none;
+  color: #007EFF;
+}
+
+
+/* `Tables
+----------------------------------------------------------------------------------------------------*/
+
+
+tr {
+  border-bottom: 1px solid #666666;
+}
+
+li {
+}
+
+
+/* `Styles
+----------------------------------------------------------------------------------------------------*/
+
+.legal {
+	
+}
+
+.callout {
+	
+}
+
+small {
+	font-size: 12px;
+}
+
+.code {
+	font: "Courier New", Courier, monospace;
+	font-size: 13px;
+	
+}
