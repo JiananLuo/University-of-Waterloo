@@ -1,338 +1,212 @@
-/*
-CS 349 A1 Skeleton Code - Snake
-
-- - - - - - - - - - - - - - - - - - - - - -
-
-Commands to compile and run:
-
-    g++ -o snake snake.cpp -L/usr/X11R6/lib -lX11 -lstdc++
-    ./snake
-
-Note: the -L option and -lstdc++ may not be needed on some machines.
-*/
-
-#include <iostream>
-#include <list>
-#include <cstdlib>
-#include <sys/time.h>
-#include <math.h>
-#include <stdio.h>
-#include <unistd.h>
-
-/*
- * Header files for X functions
- */
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include "game.h"
+#include "snake.h"
 
 using namespace std;
- 
-/*
- * Global game state variables
- */
-const int Border = 1;
-const int BufferSize = 10;
-const int FPS = 30;
-const int width = 800;
-const int height = 600;
 
-/*
- * Information to draw on the window.
- */
-struct XInfo {
-	Display	 *display;
-	int		 screen;
-	Window	 window;
-	GC		 gc[3];
-	int		width;		// size of window
-	int		height;
-};
-
-
-/*
- * Function to put out a message on error exits.
- */
-void error( string str ) {
-  cerr << str << endl;
-  exit(0);
+Snake::Snake(int x, int y)
+{
+  this->x = x;
+  this->y = y;
+  bodyLength = 3;
+  direction = D;
+  movedFlag = false;
+  for(int i=0; i<bodyLength; i++)
+  {
+    SnakeBox *sb = new SnakeBox(x-(i*BLOCK_SIZE), y);
+    body.push_back(sb);
+  }
 }
 
-
-/*
- * An abstract class representing displayable things. 
- */
-class Displayable {
-	public:
-		virtual void paint(XInfo &xinfo) = 0;
-};       
-
-class Snake : public Displayable {
-	public:
-		virtual void paint(XInfo &xinfo) {
-			XFillRectangle(xinfo.display, xinfo.window, xinfo.gc[0], x, y, 25, blockSize);
-		}
-		
-		void move(XInfo &xinfo) {
-			x = x + direction;
-			if (x < 0 || x > width) {
-				direction = -direction;
-			}
-
-            // ** ADD YOUR LOGIC **
-            // Here, you will be performing collision detection between the snake, 
-            // the fruit, and the obstacles depending on what the snake lands on.
-		}
-		
-		int getX() {
-			return x;
-		}
-		
-		int getY() {
-			return y;
-		}
-
-        /*
-         * ** ADD YOUR LOGIC **
-         * Use these placeholder methods as guidance for implementing the snake behaviour. 
-         * You do not have to use these methods, feel free to implement your own.
-         */ 
-        void didEatFruit() {
-        }
-
-        void didHitObstacle() {
-        }
-
-        void turnLeft() {
-        }
-
-        void turnRight() {
-        }
-		
-		Snake(int x, int y): x(x), y(y) {
-			direction = 5;
-            blockSize = 10;
-		}
-	
-	private:
-		int x;
-		int y;
-		int blockSize;
-		int direction;
-};
-
-class Fruit : public Displayable {
-	public:
-		virtual void paint(XInfo &xinfo) {
-			XFillRectangle(xinfo.display, xinfo.window, xinfo.gc[0], x, y, 10, 10);
-        }
-
-        Fruit() {
-            // ** ADD YOUR LOGIC **
-            // generate the x and y value for the fruit 
-            x = 50;
-            y = 50;
-        }
-
-        // ** ADD YOUR LOGIC **
-        /*
-         * The fruit needs to be re-generated at new location every time a snake eats it. See the assignment webpage for more details.
-         */
-
-    private:
-        int x;
-        int y;
-};
-
-
-list<Displayable *> dList;           // list of Displayables
-Snake snake(100, 450);
-Fruit fruit;
-
-
-/*
- * Initialize X and create a window
- */
-void initX(int argc, char *argv[], XInfo &xInfo) {
-	XSizeHints hints;
-	unsigned long white, black;
-
-   /*
-	* Display opening uses the DISPLAY	environment variable.
-	* It can go wrong if DISPLAY isn't set, or you don't have permission.
-	*/	
-	xInfo.display = XOpenDisplay( "" );
-	if ( !xInfo.display )	{
-		error( "Can't open display." );
-	}
-	
-   /*
-	* Find out some things about the display you're using.
-	*/
-	xInfo.screen = DefaultScreen( xInfo.display );
-
-	white = XWhitePixel( xInfo.display, xInfo.screen );
-	black = XBlackPixel( xInfo.display, xInfo.screen );
-
-	hints.x = 100;
-	hints.y = 100;
-	hints.width = 800;
-	hints.height = 600;
-	hints.flags = PPosition | PSize;
-
-	xInfo.window = XCreateSimpleWindow( 
-		xInfo.display,				// display where window appears
-		DefaultRootWindow( xInfo.display ), // window's parent in window tree
-		hints.x, hints.y,			// upper left corner location
-		hints.width, hints.height,	// size of the window
-		Border,						// width of window's border
-		black,						// window border colour
-		white );					// window background colour
-		
-	XSetStandardProperties(
-		xInfo.display,		// display containing the window
-		xInfo.window,		// window whose properties are set
-		"animation",		// window's title
-		"Animate",			// icon's title
-		None,				// pixmap for the icon
-		argv, argc,			// applications command line args
-		&hints );			// size hints for the window
-
-	/* 
-	 * Create Graphics Contexts
-	 */
-	int i = 0;
-	xInfo.gc[i] = XCreateGC(xInfo.display, xInfo.window, 0, 0);
-	XSetForeground(xInfo.display, xInfo.gc[i], BlackPixel(xInfo.display, xInfo.screen));
-	XSetBackground(xInfo.display, xInfo.gc[i], WhitePixel(xInfo.display, xInfo.screen));
-	XSetFillStyle(xInfo.display, xInfo.gc[i], FillSolid);
-	XSetLineAttributes(xInfo.display, xInfo.gc[i],
-	                     1, LineSolid, CapButt, JoinRound);
-
-	XSelectInput(xInfo.display, xInfo.window, 
-		ButtonPressMask | KeyPressMask | 
-		PointerMotionMask | 
-		EnterWindowMask | LeaveWindowMask |
-		StructureNotifyMask);  // for resize events
-
-	/*
-	 * Put the window on the screen.
-	 */
-	XMapRaised( xInfo.display, xInfo.window );
-	XFlush(xInfo.display);
+Snake::~Snake()
+{
+  for(int i=0; i<bodyLength; i++)
+  {
+    delete body[i];
+  }
 }
 
-/*
- * Function to repaint a display list
- */
-void repaint( XInfo &xinfo) {
-	list<Displayable *>::const_iterator begin = dList.begin();
-	list<Displayable *>::const_iterator end = dList.end();
-
-	XClearWindow( xinfo.display, xinfo.window );
-	
-	// get height and width of window (might have changed since last repaint)
-
-	XWindowAttributes windowInfo;
-	XGetWindowAttributes(xinfo.display, xinfo.window, &windowInfo);
-	unsigned int height = windowInfo.height;
-	unsigned int width = windowInfo.width;
-
-	// big black rectangle to clear background
-    
-	// draw display list
-	while( begin != end ) {
-		Displayable *d = *begin;
-		d->paint(xinfo);
-		begin++;
-	}
-	XFlush( xinfo.display );
-}
-
-void handleKeyPress(XInfo &xinfo, XEvent &event) {
-	KeySym key;
-	char text[BufferSize];
-	
-	/*
-	 * Exit when 'q' is typed.
-	 * This is a simplified approach that does NOT use localization.
-	 */
-	int i = XLookupString( 
-		(XKeyEvent *)&event, 	// the keyboard event
-		text, 					// buffer when text will be written
-		BufferSize, 			// size of the text buffer
-		&key, 					// workstation-independent key symbol
-		NULL );					// pointer to a composeStatus structure (unused)
-	if ( i == 1) {
-		printf("Got key press -- %c\n", text[0]);
-		if (text[0] == 'q') {
-			error("Terminating normally.");
-		}
+void Snake::paint(XInfo &xInfo)
+{
+  XSetForeground(xInfo.display, xInfo.gc[0], snakeColor.pixel);
+	for(int i=0; i<bodyLength; i++)
+	{
+	  XFillArc(xInfo.display, xInfo.bufferWindow, xInfo.gc[0], body[i]->getX(), body[i]->getY(), BLOCK_SIZE, BLOCK_SIZE, 0, 360*64);
 	}
 }
 
-void handleAnimation(XInfo &xinfo, int inside) {
-    /*
-     * ADD YOUR OWN LOGIC
-     * This method handles animation for different objects on the screen and readies the next frame before the screen is re-painted.
-     */ 
-	snake.move(xinfo);
+void Snake::move(XInfo &xInfo, Fruit &fruit)
+{
+  if(direction == S)
+  {
+    y = y + BLOCK_SIZE;
+  }
+  else if(direction == W)
+  {
+    y = y - BLOCK_SIZE;
+  }
+  else if(direction == A)
+  {
+	  x = x - BLOCK_SIZE;
+  }
+  else if(direction == D)
+  {
+	  x = x + BLOCK_SIZE;
+  }
+  if(NO_BOUNDARY_MODE)
+  {
+    if(this->x < 0)
+    {
+      this->x = WIDTH_BOUND;
+    }
+    else if(this->x > WIDTH_BOUND)
+    {
+      this->x = 0;
+    }
+    else if(this->y < 0)
+    {
+      this->y = HEIGHT_BOUND;
+    }
+    else if(this->y > HEIGHT_BOUND)
+    {
+      this->y = 0;
+    }
+  }
+  SnakeBox *sb = new SnakeBox(x, y);
+  body.insert(body.begin(), sb);
+  body.pop_back();
+
+  didEatFruit(fruit);
+  didHitObstacle(xInfo);
+
+  movedFlag = true;
 }
 
-// get microseconds
-unsigned long now() {
-	timeval tv;
-	gettimeofday(&tv, NULL);
-	return tv.tv_sec * 1000000 + tv.tv_usec;
+int Snake::getX()
+{
+	return x;
 }
 
-void eventLoop(XInfo &xinfo) {
-	// Add stuff to paint to the display list
-	dList.push_front(&snake);
-    dList.push_front(&fruit);
-	
-	XEvent event;
-	unsigned long lastRepaint = 0;
-	int inside = 0;
-
-	while( true ) {
-		/*
-		 * This is NOT a performant event loop!  
-		 * It needs help!
-		 */
-		
-		if (XPending(xinfo.display) > 0) {
-			XNextEvent( xinfo.display, &event );
-			cout << "event.type=" << event.type << "\n";
-			switch( event.type ) {
-				case KeyPress:
-					handleKeyPress(xinfo, event);
-					break;
-				case EnterNotify:
-					inside = 1;
-					break;
-				case LeaveNotify:
-					inside = 0;
-					break;
-			}
-		} 
-
-		usleep(1000000/FPS);
-		handleAnimation(xinfo, inside);
-		repaint(xinfo);
-	}
+int Snake::getY()
+{
+	return y;
 }
 
+char Snake::getDirection()
+{
+	return direction;
+}
 
-/*
- * Start executing here.
- *	 First initialize window.
- *	 Next loop responding to events.
- *	 Exit forcing window manager to clean up - cheesy, but easy.
- */
-int main ( int argc, char *argv[] ) {
-	XInfo xInfo;
+int Snake::getLength()
+{
+  return bodyLength;
+}
 
-	initX(argc, argv, xInfo);
-	eventLoop(xInfo);
-	XCloseDisplay(xInfo.display);
+void getEmptySpot(int &x, int &y)
+{
+  int randX = WIDTH / BLOCK_SIZE;
+  int randY = HEIGHT / BLOCK_SIZE;
+  x = rand() % randX;
+  y = rand() % randY;
+  x *= BLOCK_SIZE;
+  y *= BLOCK_SIZE;
+  while(SNAKE->isSnake(x, y) || FRUIT->isFruit(x, y) || OBSTACLES->isObstacle(x, y))
+  {
+    x = rand() % randX;
+    y = rand() % randY;
+    x *= BLOCK_SIZE;
+    y *= BLOCK_SIZE;
+  }
+}
+
+void Snake::didEatFruit(Fruit &fruit)
+{
+  if(x == fruit.getX() && y == fruit.getY())
+  {
+    int w, h;
+    getEmptySpot(w, h);
+    grow();
+    fruit.regrow(w, h);
+    cout << "Time Test: " << now() - timePassed << endl;
+    for(int i=0; i<GAME_LEVEL; i++)
+    {
+      getEmptySpot(w, h);
+      OBSTACLES->addObstacle(w, h);
+    }
+  }
+}
+
+void Snake::grow()
+{
+  SnakeBox *sb = new SnakeBox(body[bodyLength]->getX(), body[bodyLength]->getY());
+  body.push_back(sb);
+  bodyLength++;
+
+  MSG_SCORE->updateDisplayMsg("Score: " + to_string(bodyLength - 3));
+}
+
+void Snake::didHitObstacle(XInfo &xInfo)
+{
+  if(this->x < 0 || this->x > WIDTH_BOUND || this->y < 0 || this->y > HEIGHT_BOUND)
+  {
+    cout << x << " " << y << endl;
+    gameEnd(xInfo, "Crush on Wall!");
+  }
+  else if(OBSTACLES->isObstacle(this->x, this->y))
+  {
+    gameEnd(xInfo, "Crush on Obstacle!");
+  }
+  else
+  {
+    for(int i=1; i<bodyLength; i++)
+    {
+      if(body[i]->getX() == this->x && body[i]->getY() == this->y)
+      {
+        gameEnd(xInfo, "Crush on Self!");
+      }
+    }
+  }
+}
+
+void Snake::goW()
+{
+  if(direction == A || direction == D)
+  {
+    direction = W;
+  }
+}
+
+void Snake::goS()
+{
+  if(direction == A || direction == D)
+  {
+    direction = S;
+  }
+}
+
+void Snake::goA()
+{
+  if(direction == W || direction == S)
+  {
+    direction = A;
+  }
+}
+
+void Snake::goD()
+{
+  if(direction == W || direction == S)
+  {
+    direction = D;
+  }
+}
+
+bool Snake::isSnake(int cordX, int cordY)
+{
+  for(int i=0; i<bodyLength; i++)
+  {
+    if(cordX == body[i]->getX() && cordY == body[i]->getY())
+    {
+      return true;
+    }
+  }
+  return false;
 }

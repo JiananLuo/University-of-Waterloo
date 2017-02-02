@@ -9,12 +9,12 @@ MAC_OPT = "-I/opt/X11/include"
 
 all:
 	@echo "Compiling..."
-	g++ -o $(NAME) $(NAME).cpp -L/usr/X11R6/lib -lX11 -lstdc++ $(MAC_OPT)
+	g++ -std=c++0x -o $(NAME) game.cpp displayable.cpp snake.cpp snakeBox.cpp fruit.cpp obstacle.cpp obstacles.cpp text.cpp -L/usr/X11R6/lib -lX11 -lstdc++ $(MAC_OPT)
 
 run: all
 	@echo "Running..."
 	./$(NAME) 
 
 clean:
-	-rm animation clipping doublebuffer drawing drawing.min 
+	-rm animation clipping doublebuffer drawing drawing.min
 	-rm eventloop eventloop.min hello.min null null.min openwindow openwindow.min
