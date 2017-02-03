@@ -1,0 +1,9 @@
+cd ~/cs350-os161/os161-1.99/kern/conf
+./config ASST3
+cd ../compile/ASST3
+bmake depend
+bmake
+bmake install
+
+cd ~/cs350-os161/root
+sys161 kernel "p uw-testbin/vm-data1"
