@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = https://git.uwaterloo.ca/j43luo/os161-1.99.git
+	fetch = +refs/*:refs/*
+	mirror = true
+[remote "github"]
+	url = https://github.com/JiananLuo/wocao.git
+	fetch = +refs/heads/*:refs/remotes/github/*
