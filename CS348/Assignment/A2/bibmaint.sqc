@@ -1,0 +1,371 @@
+#include <stdio.h>
+#include <string.h>
+#include "util.h"
+#include <stdlib.h>
+
+
+EXEC SQL INCLUDE SQLCA;
+
+
+
+EXEC SQL BEGIN DECLARE SECTION;
+    char maName[23];
+    char url[43];
+    char pubid[11];
+    char title[71];
+    char publisher[50];
+    char appearsin[11];
+    char AllAid[200];
+    char * tempAid;
+    sqlint32 year;
+    sqlint32 volume;
+    sqlint32 number;
+	sqlint32 tempNum;
+    sqlint32 aid;
+    sqlint32 startpage;
+    sqlint32 endpage;
+    sqlint32 aorder;
+EXEC SQL END DECLARE SECTION;
+
+
+
+
+
+
+
+
+void authorCase(){
+
+	int tempNum;
+	aid = atoi(strtok(NULL, "#"));
+	
+	strcpy(maName, strtok(NULL, ")"));
+	
+
+	EXEC SQL
+	select count(*) INTO :tempNum  from author where aid = :aid;
+
+	if(tempNum != 0){
+		printf("The aid %d exists, updating info: \n",aid);
+		printf("name: %s\n",maName);
+
+		EXEC SQL UPDATE author set name = :maName where aid = :aid;
+		printf("Update author successed for aid: %d name: %s\n",aid,maName);
+
+	}
+	else{
+		printf("The aid %d does not exist, inserting info: \n",aid);
+		printf("name: %s\n",maName);
+
+		EXEC SQL INSERT INTO author(aid,name,url) VALUES (:aid,:maName,NULL);
+		printf("Insert author successed for aid:%d name: %s\n",aid,maName);
+	}
+
+}
+
+
+void authorurlCase(){
+	int tempNum;
+	aid = atoi(strtok(NULL, "#"));
+	strcpy(url,strtok(NULL, ")"));
+
+
+	EXEC SQL
+	select count(*) INTO :tempNum  from author where aid = :aid;
+
+	if(tempNum != 0){
+		printf("The aid %d exists, updating info: \n",aid);
+		printf("url: %s\n",url);
+
+		EXEC SQL UPDATE author set url = :url where aid = :aid;
+		printf("Update authorurl successed for aid:%d\n",aid);
+
+	}
+	else{
+		printf("The aid %d does not exist, inserting info: \n",aid);
+		printf("url: %s\n",url);
+
+		EXEC SQL INSERT INTO author(aid,name,url) VALUES (:aid,NULL,:url);
+		printf("Insert successed for aid:%d\n",aid);
+	}
+
+}
+
+
+
+
+
+void add_all_aid(char* all){
+	aorder = 1;
+	tempAid = strtok(all,";");
+	
+	while(tempAid != NULL){
+		aid = atoi(tempAid);
+		//printf("aid: %d    tempaid: %s      aorder: %d      pubid: %s\n",aid, tempAid,aorder,pubid);
+		EXEC SQL INSERT INTO wrote values (:aid,:pubid,:aorder);
+		
+		tempAid = strtok(NULL,";");
+
+		aorder +=1;
+	}
+}
+
+
+void bookCase(){
+
+	strcpy(pubid,strtok(NULL,"#"));
+	strcpy(title,strtok(NULL,"#"));
+	strcpy(AllAid,strtok(NULL,"#"));
+	strcpy(publisher,strtok(NULL,"#"));
+	year = atoi(strtok(NULL,")"));
+
+
+	EXEC SQL select count(*) INTO :tempNum  from book where pubid = :pubid;
+
+	if(tempNum > 0){
+		printf("The Pubid %s exists, updating info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("publisher: %s\n",publisher);
+		printf("year: %d\n",year);
+		EXEC SQL UPDATE book set publisher = :publisher,year = :year where pubid = :pubid;
+		EXEC SQL UPDATE publication set title = :title where pubid = :pubid;
+		EXEC SQL delete from wrote where pubid = :pubid;
+		printf("update successed for book\n");
+
+	}
+	else{
+		printf("The Pubid %s does not exist, inserting info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("publisher: %s\n",publisher);
+		printf("year: %d\n",year);
+		EXEC SQL INSERT INTO publication(pubid,title) VALUES (:pubid,:title);
+		EXEC SQL INSERT INTO book(pubid,publisher,year) VALUES (:pubid,:publisher,:year);
+		printf("insertion successed for book\n");
+
+		
+	}
+
+
+	add_all_aid(AllAid);
+
+}
+
+void journalCase(){
+	int tempNum;
+	strcpy(pubid,strtok(NULL,"#"));
+	strcpy(title,strtok(NULL,"#"));
+	volume = atoi(strtok(NULL,"#"));
+	number = atoi(strtok(NULL,"#"));
+	year = atoi(strtok(NULL,"#"));
+	EXEC SQL select count(*) into :tempNum from journal where pubid = :pubid;
+
+	if(tempNum > 0){
+		printf("The Pubid %s exists, updating info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("volume: %d\n",volume);
+		printf("number: %d\n",number);
+		printf("year: %d\n",year);
+		EXEC SQL UPDATE publication set title = :title where pubid = :pubid;
+		EXEC SQL UPDATE journal set volume = :volume,number = :number,year = :year where pubid = :pubid;
+
+		printf("Update journal successed for pubid: %s\n",pubid);
+	}
+	else{
+		printf("The Pubid %s does not exist, inserting info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("volume: %d\n",volume);
+		printf("number: %d\n",number);
+		printf("year: %d\n",year);
+		EXEC SQL INSERT INTO publication(pubid,title) VALUES (:pubid,:title);
+
+
+		EXEC SQL INSERT INTO journal(pubid,volume,number,year) VALUES (:pubid,:volume,:number,:year);
+		printf("insert journal successed for pubid: %s\n",pubid);
+
+	}
+
+}
+
+
+void proceedingsCase(){
+	strcpy(pubid,strtok(NULL,"#"));
+	strcpy(title,strtok(NULL,"#"));
+	year = atoi(strtok(NULL,")"));
+	EXEC SQL select count(*) INTO :tempNum  from proceedings where pubid = :pubid;
+
+	if(tempNum > 0){
+		printf("The Pubid %s exists, updating info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("year: %d\n",year);
+		EXEC SQL UPDATE publication set title = :title where pubid = :pubid;
+		EXEC SQL UPDATE proceedings set year = :year where pubid = :pubid;
+		printf("Update proceedings successed for pubid: %s\n",pubid);
+	}
+	else{
+		printf("The Pubid %s does not exist, inserting info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("year: %d\n",year);
+		EXEC SQL INSERT INTO publication(pubid,title) VALUES (:pubid,:title);
+
+
+		EXEC SQL INSERT INTO proceedings(pubid,year) VALUES (:pubid,:year);
+		printf("insert proceedings successed for pubid: %s\n",pubid);
+
+	}
+}
+
+void articleCase(){
+
+
+
+	
+
+	strcpy(pubid,strtok(NULL,"#"));
+
+	strcpy(title,strtok(NULL,"#"));
+
+	strcpy(AllAid,strtok(NULL,"#"));
+
+	strcpy(appearsin,strtok(NULL,"#"));
+
+	startpage = atoi(strtok(NULL,"#"));
+
+	endpage = atoi(strtok(NULL,")"));
+
+
+
+
+	EXEC SQL select count(*) into :tempNum from article where pubid = :pubid;
+
+	if(tempNum > 0){
+
+		printf("The Pubid %s exists, updating info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("appearsin: %s\n",appearsin);
+		printf("startpage: %d\n",startpage);
+		printf("endpage: %d\n",endpage);
+
+		EXEC SQL UPDATE article set appearsin = :appearsin , startpage = :startpage , endpage = :endpage where pubid = :pubid;
+		
+		EXEC SQL UPDATE publication set title = :title where pubid = :pubid;
+
+		EXEC SQL delete from wrote where pubid = :pubid;
+		printf("Updated\n");
+		
+	}
+	else{
+		printf("The Pubid %s does not exist, inserting info: \n",pubid);
+		printf("title: %s\n",title);
+		printf("appearsin: %s\n",appearsin);
+		printf("startpage: %d\n",startpage);
+		printf("endpage: %d\n",endpage);
+
+		EXEC SQL insert into publication(pubid,title) values (:pubid,:title);
+		EXEC SQL insert into article(pubid,appearsin,startpage,endpage) values (:pubid, :appearsin, :startpage, :endpage);
+		
+		
+		printf("Inserted\n");
+		
+	}
+
+	add_all_aid(AllAid);
+
+}
+
+void AllCases(){
+
+	char *MyLine;
+    size_t bufsize = 2048;
+    char *type;
+    MyLine = malloc(bufsize * sizeof(char));
+
+    int counter = 1;
+
+
+    while(getline(&MyLine, &bufsize ,stdin) != EOF){
+
+    	printf("----------------------Operation #%d begins----------------------\n",counter);
+    	printf("\n");
+
+
+
+    	type = strtok(MyLine,"(");
+    	printf("This is %s operation\n",type);
+
+
+    	if(strcmp(type, "author") == 0)
+    	{
+
+    		authorCase();
+    	}
+    	else if(strcmp(type, "authorurl") == 0)
+    	{
+    		authorurlCase();
+
+    	}
+    	else if(strcmp(type, "book") == 0)
+    	{	
+    		bookCase();
+    	}
+    	else if(strcmp(type, "journal") == 0)
+    	{
+
+    		journalCase();
+
+    	}
+    	else if(strcmp(type, "proceedings") == 0)
+    	{
+    		proceedingsCase();
+
+
+    	}
+    	else if(strcmp(type, "article") == 0)
+    	{
+    		articleCase();
+    	}
+
+
+    	printf("----------------------Ending Operation #%d----------------------\n",counter);
+    	printf("\n\n\n");
+
+    	counter+=1;
+		    	
+
+    }
+    free(MyLine);
+}
+
+
+int main(){
+	int a;
+	EXEC SQL BEGIN DECLARE SECTION;
+      char db[6] = "cs348";
+   	EXEC SQL END DECLARE SECTION;
+   	EXEC SQL WHENEVER SQLERROR  GO TO error;
+   	printf("connecting to cs348\n");
+
+   	EXEC SQL CONNECT TO :db;
+   	printf("CONNECTED\n");
+	printf("**************************** Start of the program ****************************\n");
+
+
+
+
+	AllCases();
+
+
+
+	printf("**************************** End of the program ****************************\n");
+ 	EXEC SQL COMMIT;
+   	EXEC SQL CONNECT reset;
+   	exit(0);
+
+error:
+	check_error("My error",&sqlca);
+	EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+	EXEC SQL ROLLBACK;
+	EXEC SQL CONNECT reset;
+	exit(1);
+
+}

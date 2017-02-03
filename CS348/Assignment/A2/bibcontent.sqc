@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <string.h>
+#include "util.h"
+#include <stdlib.h>
+
+EXEC SQL INCLUDE SQLCA;
+
+//Global variables declearation (need one more space for the null terminator)
+EXEC SQL BEGIN DECLARE SECTION;
+	char maName[23]; 
+	char pubid[11];
+	char title[71];
+EXEC SQL END DECLARE SECTION;
+
+
+//print all authors in table WROTE corresponding to the pubid
+void printAuthors()
+{
+	EXEC SQL DECLARE C2 CURSOR FOR
+		select a.name
+		from AUTHOR a, WROTE w
+		where a.aid = w.aid AND
+				w.pubid = :pubid
+		order by w.aorder;
+
+	EXEC SQL OPEN C2;
+	for( ;; )
+	{
+		EXEC SQL FETCH C2 INTO :maName;
+		if (SQLCODE == 100)
+			break;
+		
+		printf("%s", maName);
+		
+		if (SQLCODE == 100)
+			break;
+		printf(", ");
+	}
+	EXEC SQL CLOSE C2;
+}
+
+//print information for article type
+void printArticle()
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		char appearsin[10];
+		sqlint32 startpage;
+		sqlint32 endpage;
+	EXEC SQL END DECLARE SECTION;
+	
+		
+	EXEC SQL
+		SELECT appearsin, startpage, endpage INTO :appearsin, :startpage, :endpage
+		FROM ARTICLE a
+		WHERE pubid = :pubid;
+	
+	printf("Authors:	");
+	printAuthors();
+	printf("\n");
+	printf("In:	 %s\n", appearsin);
+	printf("Pages:	%d--%d\n", startpage, endpage);
+	printf("\n");
+}
+
+
+void createMyTable()
+{
+	EXEC SQL DECLARE C1 CURSOR FOR
+		select p.pubid, p.title
+		from PUBLICATION p, ARTICLE a
+		where p.pubid = a.pubid AND
+				a.appearsin = :pubid
+		order by a.startpage;
+
+	EXEC SQL OPEN C1;
+	for( ;; )
+	{
+		EXEC SQL FETCH C1 INTO :pubid, :title;
+		if (SQLCODE == 100)
+		{
+			break;
+		}
+		printf("Pubid:	%s\n", pubid );
+		printf("Type:	 article\n" );
+		printf("Title:	%s\n", title );
+
+		printArticle();
+	}
+	EXEC SQL CLOSE C1;
+}
+
+
+int main(int argc, char * argv[])
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		char db[6] = "CS348";
+	EXEC SQL END DECLARE SECTION;
+	EXEC SQL CONNECT TO :db;	
+
+	strcpy(pubid, argv[1]);
+	createMyTable();
+
+
+	EXEC SQL COMMIT;
+	EXEC SQL CONNECT reset;
+
+	return 0;
+}

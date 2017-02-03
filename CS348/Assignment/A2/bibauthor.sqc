@@ -1,0 +1,226 @@
+#include <stdio.h>
+#include <string.h>
+#include "util.h"
+#include <stdlib.h>
+EXEC SQL INCLUDE SQLCA;
+
+//Global variables declearation (need one more space for the null terminator)
+EXEC SQL BEGIN DECLARE SECTION;
+	char maName[23];
+	char pubid[11];
+	char title[71];
+	sqlint32 year;
+	char type[20];
+EXEC SQL END DECLARE SECTION;
+
+
+//print all authors in table WROTE corresponding to the pubid
+void printAuthors()
+{
+	EXEC SQL DECLARE C2 CURSOR FOR
+		select trim(coalesce(a.name,'')) as name
+		from AUTHOR a, WROTE w
+		where a.aid = w.aid AND
+				w.pubid = :pubid
+		order by w.aorder;
+
+	EXEC SQL OPEN C2;
+	for( ;; )
+	{
+		EXEC SQL FETCH C2 INTO :maName;
+		if (SQLCODE == 100)
+			break;
+		
+		printf("%s", maName);
+
+		if (SQLCODE == 100)
+			break;
+		printf(", ");
+	}
+	EXEC SQL CLOSE C2;
+}
+
+//print information for book type
+void printBook()
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		char publisher[51];
+	EXEC SQL END DECLARE SECTION;
+	EXEC SQL
+		SELECT publisher, year INTO :publisher, :year
+		FROM BOOK
+		WHERE pubid = :pubid;
+
+	printf("Authors:	");
+	printAuthors();
+	printf("\n");
+	printf("Publishedr:	%s\n", publisher);
+	printf("Year:	%d\n", year);
+}
+
+//print information for journal type
+void printJournal()
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		sqlint32 volume;
+		sqlint32 numb;
+	EXEC SQL END DECLARE SECTION;
+	EXEC SQL
+		SELECT volume, number, year INTO :volume, :numb, :year
+		from JOURNAL
+		where pubid = :pubid;
+
+	printf("Volume:	%d\nNumber:	%d\nYear:	%d\n", volume, numb, year);
+}
+
+//print information for proceedings type
+void printProceeding()
+{
+	EXEC SQL
+		SELECT year INTO :year
+		FROM PROCEEDINGS p
+		WHERE pubid = :pubid;
+
+	printf("Year:	 %d\n", year);
+}
+
+//print information for article type
+void printArticle()
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		char appearsin[10];
+		sqlint32 startpage;
+		sqlint32 endpage;
+	EXEC SQL END DECLARE SECTION;
+	
+		
+	EXEC SQL
+		SELECT appearsin, startpage, endpage INTO :appearsin, :startpage, :endpage
+		FROM ARTICLE a
+		WHERE pubid = :pubid;
+	
+	printf("Authors:	");
+	printAuthors();
+	printf("\n");
+	printf("In:	 %s\n", appearsin);
+	printf("Pages:	%d--%d\n", startpage, endpage);
+}
+
+void createMyTable()
+{
+	/*	TablePid: 
+				pubid	year	author	type
+		TableP:								for all proceeding type
+		TableJ:								for all proceeding + journal type
+		TableB:								for all proceeding + journal + book type
+		TableA:								for all proceeding + journal + book + articles type (ordered by year first, then by author name)
+	*/
+	EXEC SQL DECLARE C1 CURSOR FOR
+	with
+	TablePid(pubid) as (
+		select distinct pubid
+		from AUTHOR a, WROTE r
+		where a.aid = r.aid AND
+			a.name = :maName
+	),
+	TableP(pubid, year, author, type) as (
+		select t.pubid, p.year, '' as author, 'proceedings' as type
+		from TablePid t, PROCEEDINGS p
+		where t.pubid = p.pubid
+	),
+	TableJ(pubid, year, author, type) as (
+		select t.pubid, j.year, '' as author, 'journal' as type
+		from TablePid t, JOURNAL j
+		where t.pubid = j.pubid
+		UNION ALL
+		select pubid, year, author, type
+		from TableP
+	),
+	TableB(pubid, year, author, type) as (
+		select t.pubid, b.year, a.name, 'book' as type
+		from TablePid t, BOOK b, WROTE w, AUTHOR a
+		where t.pubid = b.pubid AND
+				t.pubid = w.pubid AND
+				w.aorder = 1 AND
+				w.aid = a.aid
+		UNION ALL
+		select pubid, year, author, type
+		from TableJ
+	),
+	TableJP(pubid, year) as (
+		select pubid, year
+		from JOURNAL
+		UNION ALL
+		select pubid, year
+		from PROCEEDINGS
+	),
+	TableA(pubid, year, author, type) as (
+		select t.pubid, t2.year, au.name, 'article' as type
+		from TablePid t, ARTICLE a, TableJP t2, WROTE w, AUTHOR au
+		where t.pubid = a.pubid AND
+				a.appearsin = t2.pubid AND
+				t.pubid = w.pubid AND
+				w.aorder = 1 AND
+				w.aid = au.aid
+		UNION ALL
+		select pubid, year, author, type
+		from TableB
+	)
+	select t.pubid, t.type, p.title
+	from TableA t, PUBLICATION p
+	where t.pubid = p.pubid
+	order by t.year DESC, author;
+
+	//loop thought the table and print all publication information based on the type
+	EXEC SQL OPEN C1;
+	for( ;; )
+	{
+		EXEC SQL FETCH C1 INTO :pubid, :type, :title;
+		if (SQLCODE == 100)
+		{
+			break;
+		}
+		printf("Pubid:	%s\n", pubid );
+		printf("Type:	 %s\n", type );
+		printf("Title:	%s\n", title );
+
+		if(type[0] == 'b')
+			printBook();
+		else if(type[0] == 'j')
+			printJournal();
+		else if(type[0] == 'p')
+			printProceeding();
+		else//else if(type[0] == 'a')
+			printArticle();
+
+		printf("\n" );
+	}
+	EXEC SQL CLOSE C1;
+}
+
+
+
+int main(int argc, char * argv[])
+{
+	EXEC SQL BEGIN DECLARE SECTION;
+		char db[6] = "CS348";
+	EXEC SQL END DECLARE SECTION;
+	EXEC SQL CONNECT TO :db;
+
+	strcpy(maName, argv[1]);
+
+	createMyTable();
+
+
+	EXEC SQL COMMIT;
+   	EXEC SQL CONNECT reset;
+   	exit(0);
+
+error:
+	check_error("My error",&sqlca);
+	EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+	EXEC SQL ROLLBACK;
+	EXEC SQL CONNECT reset;
+	exit(1);
+}
