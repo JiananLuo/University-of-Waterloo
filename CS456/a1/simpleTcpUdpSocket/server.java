@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.io.IOException;
 
-class server
+class Server
 {
 	public static void main(String argv[]) throws Exception
 	{
@@ -24,10 +24,10 @@ class server
 		}
 
 		//inputs are fine
-		System.out.println("SERVER_PORT=52500");
-
-		//Create welcoming socket at port 52500
-		ServerSocket welcomeSocket = new ServerSocket(52500);
+		//Create welcoming socket at random avaiable port
+		ServerSocket welcomeSocket = new ServerSocket(0);
+		int nPort = welcomeSocket.getLocalPort();
+		System.out.println("SERVER_PORT=" + nPort);
 		while(true)
 		{
 			//Wait, on welcoming socket for contact by client
@@ -50,7 +50,7 @@ class server
 				int rPort = availableSocket.getLocalPort();
 				//Write out line to socket
 				outToClient.writeBytes(String.valueOf(rPort) + '\n');
-				System.out.println("Generated rPort: " + rPort);
+				//System.out.println("Generated r_port: " + rPort);
 
 				//Create datagram socket at port rPort
 				DatagramSocket UDPServerSocket = new DatagramSocket(rPort);

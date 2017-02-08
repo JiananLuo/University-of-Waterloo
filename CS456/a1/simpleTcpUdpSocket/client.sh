@@ -16,7 +16,7 @@
 #./client $1 $2 $3 "$4"
 
 #For Java implementation
-java client $1 $2 $3 "$4"
+java Client $1 $2 $3 "$4"
 
 #For Python implementation
 #python client.py $1 $2 $3 "$4"
