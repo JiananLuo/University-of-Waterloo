@@ -109,6 +109,7 @@ public class Model
 	public void clearAllStrokes()
 	{
 		this.saved = true;
+		this.currentPoint = 0;
 		removeLastNStrokes(this.totalFrame);
 	}
 
@@ -249,8 +250,9 @@ public class Model
 		}
 	}
 
-	public void checkSavedBeforeClear()
+	public boolean checkSavedBeforeClear()
 	{
+		boolean cancelled = false;
 		if (!this.isSaved())
 		{
 			int dialogResult = JOptionPane.showConfirmDialog(null,
@@ -267,13 +269,14 @@ public class Model
 			}
 			else
 			{
-				return;
+				cancelled = true;
 			}
 		}
 		else
 		{
 			this.clearAllStrokes();
 		}
+		return cancelled;
 	}
 
 	public void showSaveDialog()

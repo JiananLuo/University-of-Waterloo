@@ -49,14 +49,18 @@ public class MenuBar extends JPanel implements Observer
 		});
 		MenuItem_LOAD.addActionListener(e ->
 		{
-			model.checkSavedBeforeClear();
-			model.clearAllStrokes();
-			model.showLoadDialog();
+			if (!model.checkSavedBeforeClear())
+			{
+				model.clearAllStrokes();
+				model.showLoadDialog();
+			}
 		});
 		MenuItem_QUIT.addActionListener(e ->
 		{
-			model.checkSavedBeforeClear();
-			System.exit(0);
+			if (!model.checkSavedBeforeClear())
+			{
+				System.exit(0);
+			}
 		});
 		POPUP_FILE.add(MenuItem_NEW);
 		POPUP_FILE.add(MenuItem_SAVE);

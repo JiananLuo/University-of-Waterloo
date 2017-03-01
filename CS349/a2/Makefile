@@ -19,4 +19,4 @@ clean:
 	$(RM) *.class
 
 run: default
-	$(JAVA) -cp . Main
+	$(JAVA) -cp . Doodle
