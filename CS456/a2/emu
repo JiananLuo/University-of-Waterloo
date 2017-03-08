@@ -1,0 +1,2 @@
+make
+./nEmulator 49991 ubuntu1404-004.student.cs.uwaterloo.ca 49994 49993 ubuntu1404-008.student.cs.uwaterloo.ca 49992 1 0.0 0
