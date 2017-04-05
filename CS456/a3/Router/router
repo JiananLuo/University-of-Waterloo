@@ -1,0 +1,12 @@
+#!/bin/bash
+routers_host="ubuntu1404-002.student.cs.uwaterloo.ca"
+nse_port=8972
+nse_host="ubuntu1404-004.student.cs.uwaterloo.ca"
+
+router_port_array=(10000 10001 10002 10003 10004)
+
+for i in 1 2 3 4 5
+do
+	nohup java Router ${i} $nse_host $nse_port ${router_port_array[$i-1]} 2>&1 & echo $! > r$i.pid
+	sleep 1
+done
