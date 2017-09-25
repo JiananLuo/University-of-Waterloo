@@ -1,0 +1,28 @@
+i)
+	Since we no longer throw E(), theres no destructor called, so there will be less "~"
+
+ii)
+	Without -O2
+	@ubuntu1604-006% /usr/bin/time -f "%Uu %Ss %E" ./throwcatch 15 15 15
+	29.94u 
+	@ubuntu1604-006% /usr/bin/time -f "%Uu %Ss %E" ./longjmp 15 15 15
+	6.17u
+
+	With -O2
+	@ubuntu1604-006% /usr/bin/time -f "%Uu %Ss %E" ./throwcatch 15 15 15
+	33.04u
+	@ubuntu1604-006% /usr/bin/time -f "%Uu %Ss %E" ./longjmp 15 15 15
+	6.14u
+
+
+iii)
+	Without -O2
+	transformed program is way more faster than original program by 29.94u - 6.17u = 23.77u when compiler optimization is not used
+
+	Difference is caused by:
+		with throw & catch: when we throw, we have to search which catch {} will catch the throw exception.
+		without jump: We have the jump address, so we don't care about these since there will be no search for the above step.
+
+iv)
+	With -O2
+	transformed program is way more faster than original program by 33.04u - 6.14u = 26.90u when compiler optimization is used
