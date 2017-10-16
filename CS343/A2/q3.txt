@@ -1,0 +1,36 @@
+a.
+	without -multi
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+		shared:20000000
+	with -multi
+		shared:10149561
+		shared:10098865
+		shared:11442120
+		shared:11372306
+		shared:10422190
+		shared:10106754
+		shared:10768139
+		shared:10061311
+		shared:10336888
+		shared:10452038
+
+b.
+	without -multi, Yes, the result should be same. Since no uProcessor involved, only increment will be called before or after instruction. The order will not change.
+	with -multi, No, it might not produce the same result. Since the execution order may change.
+
+c.
+	Smallest: 2
+		Two thread A & B, 1 of them do only 1 itertaion, while another one do 9,999,999. Ex. A load -> B do 9,999,999 -> A do 1 -> B load -> A complete (10,000,000) -> B increase from 1 to 2 (2)
+	Largest: 20,000,000
+		Two thread A & B, they both do full loads. That doubles the 10,000,000. As Ex above, they final step will be B increase from 10,000,000 to 20,000,000
+
+d.
+	As shown in part (a), we got around 10,000,000 for the multiprocessor, which means it would be half of the output of uniprocessor. As we know, there are 2 threads in our program, and the difference we got between uniprocessor and multiprocessor tells us that those 2 threads run concurrently.

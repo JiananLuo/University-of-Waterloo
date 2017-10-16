@@ -1,0 +1,83 @@
+-------+-----------------------------------------------------------------------------------------
+Test # | Purpose of Tests
+-------+-----------------------------------------------------------------------------------------
+1-6    | Tests the invalid command line
+-------+-----------------------------------------------------------------------------------------
+7      | Tests that valid commands base case
+-------+-----------------------------------------------------------------------------------------
+8-9    | Tests the implementation of drink
+-------+-----------------------------------------------------------------------------------------
+10     | Tests the implementation of die
+-------+-----------------------------------------------------------------------------------------
+11-14  | Tests the implementation of win
+-------+-----------------------------------------------------------------------------------------
+15-18  | Tests the implementation of pass left & right
+-------+-----------------------------------------------------------------------------------------
+
+
+-------+--------------+-----------------------------+--------------------------------------------
+Test # | Type of Test | command                     | Reason for Test                            
+-------+--------------+-----------------------------+--------------------------------------------
+1      | incorrect #  | ./cardgame  1 1 1 1 1       | Incorrect # of command line argument passed
+       | of arguments |                             | cerr invalid Usage                         
+-------+--------------+-----------------------------+--------------------------------------------
+2      | incorrect    | ./cardgame  x ss 1 1        | Incorrect arguments parse                  
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+3      | incorrect    | ./cardgame  -1 2 1 1        | Incorrect arguments # games value          
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+4      | incorrect    | ./cardgame  0 1 1 1         | Incorrect arguments # players value        
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+5      | incorrect    | ./cardgame  0 2 0 1         | Incorrect arguments # cards value          
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+6      | incorrect    | ./cardgame  0 2 1 0         | Incorrect arguments seed value             
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+7      | base valid   | ./cardgame  0 2 1 1         | Correct base case arguments                
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+8      | 4 player, 1  | ./cardgame  x x x 1         | multi player left, some of them dead, rest 
+       | dead rest    |                             | player drink. print D       D       D      
+       | drink        |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+9      | all player   | ./cardgame  x x x 1         | multi player left, all alive, all player   
+       | alive, all   |                             | drink. print D       D       D       D     
+       | drink        |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+10     | 1 player die | ./cardgame  x x x 1         | 1 player die, by deckLeft + deckTake mod 7 
+       | deckLeft % 7 |                             | print 4:31<X                               
+-------+--------------+-----------------------------+--------------------------------------------
+11     | mult player  | ./cardgame  x x x 1         | multi player left, last player win         
+       | left, last   |                             | print 5:0#                                 
+       | player win   |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+12     | player left  | ./cardgame 1 2 50 15        | player last player win                     
+       | last player  |                             | print #38#                                 
+       | wins         |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+13     | mult player  | ./cardgame  x x x 1         | multi player left, last player win & die   
+       | left win&die |                             | at the same time. print 7:0#X              
+       | at same time |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+14     | 1 player left| ./cardgame  x x x 1         | 1 player left, but win & die at the same   
+       | win & die    |                             | time. print #42#X                          
+       | at same time |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+15     | 1 player pass| ./cardgame  x x x 1         | 1 player left, but win & die at the same   
+       | right & alive|                             | time. print 3:106>                         
+       | at same time |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+16     | 1 player pass| ./cardgame  x x x 1         | 1 player left, but win & die at the same   
+       | left & alive |                             | time. print 5:115<                         
+       | at same time |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+17     | 1 player pass| ./cardgame  x x x 1         | 1 player left, but win & die at the same   
+       | left  & die  |                             | time. print 3:109<X                        
+       | at same time |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+18     | 1 player pass| ./cardgame  x x x 1         | 1 player left, but win & die at the same   
+       | right & die  |                             | time. print 3:88>X                         
+       | at same time |                             |                                            
