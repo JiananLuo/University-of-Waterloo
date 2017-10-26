@@ -1,0 +1,8 @@
+a)	Describe:
+	The minimax algorithm for non-zero-sum games works exactly the same. Each leaf node will store a vector of values, one for each player, and the backup step selects whichever vector has the best value for the player whose turn it is to move. The alphat-beta pruning will not work because for each leaf node there is a possibility that is good for both player. Therefore, all the leaf nodes need to be examined. 
+
+b)	NO.
+	It is not possible for any node to be pruned by alpha-beta when there are no constraints on the two utility functions. In the case where an unexamined leaf node might be optimal for both players. In this case, those nodes can't get pruned.
+
+c)	Still NO.
+	Even on any state differ by at most a constant k, it still could have the same case as in part b) make nodes not possible to be pruned by alpha-beta. Same thing as in part b). This constraint doesn’t help pruning.

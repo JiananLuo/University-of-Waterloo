@@ -1,0 +1,17 @@
+a)	The local search operator is a complete city path include all cities at a random order, and everytime it will find 2 new city, swap they to form a new path.
+
+b)	Annealing schedules:
+		1. T: 10000, decrease T by 0.0001 each time
+		2. T: 300, decrease T by 0.0001 each time
+		3. T: 400, decrease T by 0.000005 each time
+
+	I would chose (3), it takes a bit longer than first 2 schedules but the solution is always less costly. It will only take less than 30sec to solve this problem. 10 time Utility average around 480.
+
+c)	Plot: Please see TSPPlot.png
+	Best solution:
+		A K W J Q Z P O AD E C AC U S F AE R M AG H AJ B G AA AF T Y I AI AH L D V X N AB A
+		465.7624777311007
+
+d)	My version simulated annealing is complete. Since the start state is a complete state, and everytime it loop, 2 city might swap which is still a complete state. To the time T < 0, loop will stop, and return the best solution stored. Therefore, it is complete.
+
+e)	It is not optimal. Since everytime the program run, it return a different path && different cost. If T is decreased slowly enough then simulated annealing is (theoretically) guaranteed to reach optimal solution.

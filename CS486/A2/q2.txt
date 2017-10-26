@@ -1,0 +1,13 @@
+a)	Prove:
+	Consider the situation where MAX player play optimally but MIN player doesn't. Let u' be the utility obtained by MAX player when estimating the move of MIN player. Note that u' is the smallest utility MIN player can choose since MAX player assumes that MIN player plays optimally. However, MIN player will be pick a move with utility u and u is always greater or equal to u' because u' is optimal and MIN player doesn't play optimally.
+
+b)	Yes.
+	As the first graph below(minimax search tree), as we see, by using the minimax search, max player will choose 2. And the final utility is 2 for max player.
+	How ever if we use suboptimal strategy for both player in this game tree, Max player will choose the left node first, which is node(min[1]), Min player also play sub-optimal strategy, so instead of choosing (1), Min player will choose (4). Hence the result for Max player will be 4. Since using minimax search max player will only get 2 as the utility. Therefore the final utility for max is 4 instead of 2 which means can do better compare to minimax search.
+
+    Game tree:
+            max[2]
+             /  \
+       min[1]    min[2]
+        /  \      /  \
+      (1)  (4)  (2)  (3)
