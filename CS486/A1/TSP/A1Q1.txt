@@ -1,0 +1,40 @@
+Your problem representation.
+	State:
+	State will be the path from A to another city. It looks like "A B C" where A B C are all city names and separaty by space.
+
+	Initial State:
+	"A"
+
+	Goal states:
+	Path contains every city in the input file
+
+	Operator:
+	Append new city in the end of path
+
+	Cost:
+	Total distance to this path
+
+
+The description of your heuristic function.
+	Since we know For graphs, if h(n)≤cost(n,n’)+h(n’) is satisfied, it will be Optimality for A*. So its simple to this question, since its a completed && undirect graph, so the distance from cityA to cityB will just be sqrt((cityA.x-cityB.x)^2+(cityA.y-cityB.y)^2). We know that in a triangle, the sum of the lengths of any two sides of the triangle is greater than the length of the third side. So if we just set h(n) = distance between cityA and cityN, we can satisfy h(n)≤cost(n,n’)+h(n’) this equation.
+
+
+Plot
+	See TSPPlot.png
+	(note that for # of city 11, 12, 13, 14, 15, 16 & 36, did not terminate) 
+
+
+A discussion on the difference in performance when using the two different heuristic functions.
+	Performance for my heuristic functions will be very bad when # of city gets very large.
+	Performance of h(n) = 0 will still be very bad since based on the logic, it will expend close to all the nodes to leaf.
+	For # of city < 9, run time could be ignore (very small)
+	For # of city = 9, run time approximate to 1.5s
+	For # of city = 10, run time approximate to 70s
+	For # of city = 11, run time approxmiate to 250s
+	For # of city > 11, run time will be greater than 5min, count as not terminate
+	(Note that # of city > 11 means very bad)
+
+
+A discussion of how you expect A* search to perform on a 36-city problem instance for both heuristic functions.
+	For my heuristic functions, it will horribly slow or even run out of memory
+	For h(n) = 0, Horribly slow or even run out of memory but might be a little bit faster compare to my heuristic function.

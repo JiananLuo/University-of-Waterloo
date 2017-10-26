@@ -1,0 +1,26 @@
+A written description of your problem representation
+	Variables:
+	C0,.........,C80
+
+	Domains:
+	{1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+	Constraints:
+	Ci.val != Cj.val, where
+	(i/9 == j/9) || (i%9 == j%9) || ((i/3 == j/3) && (i%3 == j%3))
+
+
+The plot
+	See SudokuPlot.png
+	(note that for steps more than 10000, we count as 10000)
+
+
+A discussion of your findings and an explanation for why your program behaves as it does.
+	VersionA - Standard backtracking search
+				This one basically will try all the possible values for each empty cell, if a try will break the board, it will go search for other possible values for this cell. If no other possible value works, it will go back to last empty cell, try a different value.
+				So the trys for cells is more than versionB & C since it will try & if not work then reset.
+	VersionB - Standard backtracking search + forward checking
+				This one basically will try all possible values for each empty cell, however, once a cell's value is changed, it will notify all its friend cells (friend cell is either in same row, column, block as the cell), and update their possible values. Once we set a cell with a value, if it will remove the last possible value for a cell, then we sure that it won't work anyway no matter how we fill the rest of the board. So It avoid lots of unnecessary steps from VersionA.
+	VersionC - Standard backtracking search + forward checking + heuristics
+				This one basically same as VersionB, however, we will find cells with the least possible value and try to fill them up. Base case for cell only has 1 possible value, we will fill them first, so once they got updated, we will skip steps where trys will remove the only one possible for those cells. Same for other # of possible value cells, as long as we detect failure sooner for less possible value cells, we will avoid more steps.
+	Based on above, we expect to see steps for VersionA >= VersionB >= Version C, and according to the graph, we can see the plot matches what we expected.

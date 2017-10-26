@@ -1,0 +1,15 @@
+i)
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 0	12.35u 0.18s 0:12.54
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 1	13.18u 0.54s 0:13.73
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 2	13.18u 1.86s 0:15.05
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 3	13.28u 3.46s 0:16.75
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 4	13.13u 3.52s 0:16.66
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 5	13.36u 3.51s 0:16.88
+	/usr/bin/time -f "%Uu %Ss %E" ./quicksort -t 200000000 6	13.51u 3.59s 0:17.10
+
+ii)
+	The user time slightly increased based on the increase of depth. So does the real time.
+	User time averagely increase 0.19333 sec, real time averagely increase 0.76 sec.
+
+iii)
+	It is obvious that the user time didn't increase a lot during these data. However we can see the system run time is highly increased based the increase of the depth. The reason for this is based on the increase of depth, system supending more time on processor, thats what causing the total increase of the time.

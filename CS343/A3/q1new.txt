@@ -1,0 +1,15 @@
+a)
+					1 task					2 tasks					4 tasks
+	STACK			0.59u 0.00s 0:00.60		1.07u 0.00s 0:00.56		2.32u 0.00s 0:00.60
+	DARRAY			0.92u 0.00s 0:00.92		10.09u 0.01s 0:05.05	41.04u 0.06s 0:10.75
+	VECTOR1			1.30u 0.00s 0:01.33		10.54u 0.01s 0:05.27	42.50u 0.01s 0:10.81
+	VECTOR2			6.35u 0.00s 0:06.37		52.83u 0.04s 0:26.41	260.90u 0.30s 1:05.70
+	
+b)
+	Stack: User time for 2-task is 2 times than 1-task, 4-task is 2 times than 2-task. However, real time kind the same.
+	DARRAY: User time for 2-task is 10 times than 1-task, 4-task is 4 times than 2-task. Real time for 2-task is 5 times than 1-task, 4 task is 2 times than 2-task.
+	VECTOR1: User time for 2-task is 8 times than 1-task, 4-task is 4 times than 2-task. Real time for 2-task is 4 times than 1-task, 4-task is 2 times than 2-task.
+	VECTOR2: User time for 2-task is 8 times than 1-task, 4-task is 5 times than 2-task. Real time for 2-task is 4 times than 1-task, 4-task is 2.5 times than 2-task.
+
+c)
+	The Stack version is way more faster than other version, since it doesnt need to allocate things on heap. Version performance: STACK >> DARRAY >~ VECTOR1 >> VECTOR2
