@@ -1,0 +1,23 @@
+a)
+	RRRR = RRFR = RRFF
+	 ||     ||     ||
+	URRR = URFR	= URFF
+	 ||     ||     ||
+	UURR = UUFR = UUFF
+
+	(Note: '=' & '||' connected between 2 state mean transition can go between these 2 states in either direction)
+
+b)
+	The graphs generated for the 4 different values of a.
+		a = 0.1: q1_a0.1.png
+		a = 0.5: q1_a0.5.png
+		a = 0.8: q1_a0.8.png
+		a = 1.0: q1_a1.0.png
+
+
+	A discussion of your results. In particular explain how the number of actions taken by the robot to get dressed changes as a function of the number of training episodes.
+		For all a, # of traversals are very likely jump to 50 in the beginning, when training episode is small. As the training episode increase, the # of traversals will bump between 4 & 50, more likely to be 50 when close to beginning, and more likely to be 4 when close to end. Sometimes the # of traversals will be in between 4 & 50, but this case is very unlikely to happen. As training episode increase above 100, the # of traversals will be stable at 4. This means as the # of traversals increase, the # of traversals will tend to be optimal.
+
+
+	Also explain how the learning rate, a, changes the learning process.
+		The a controls how fast the machine will approach to the optimal solution. As the q1_a*.png shows, we can see as the a goes down, the traning episode bump between 4 & 50 more approch to right. So based on that, we can tell, as the a goes up (close to 1.0), its faster that machine will be trained to the optimal solution (high learning rate). When a goes down (close to 0), its slower that machine will be trained to the optimal solution(low learning rate).

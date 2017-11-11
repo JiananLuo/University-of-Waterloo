@@ -1,0 +1,23 @@
+a)
+	without O2
+	without -DSTR	2.04u 0.23s 0:02.30
+	with 	-DSTR	5.52u 0.20s 0:05.75
+	with O2
+	without -DSTR	1.86u 0.20s 0:02.13
+	with	-DSTR	3.70u 0.19s 0:03.90
+
+b)
+	It is around 2.5 times slower when compiled with -DSTR. The is because the external buffer allocates heap memories in order to concatenates strings. On the other hand, the internal buffer stores the result in the stack which makes it much faster. 
+
+c)
+	The version compiled with only -O2 is 2 times faster than the version compiled with -DSTR and -O2
+
+d)
+	without O2
+	without -DSTR	2.00u 0.05s 0:02.06
+	with 	-DSTR	5.49u 0.05s 0:05.55
+	with O2
+	without -DSTR	1.77u 0.06s 0:01.84
+	with	-DSTR	3.50u 0.05s 0:03.56
+
+	It is faster for the version compiled with '\n' compare to the version compiled with endl. The difference is due to  the extra step that endl takes, which is flush the buffer.

@@ -1,0 +1,73 @@
+-------+-----------------------------------------------------------------------------------------
+Test # | Purpose of Tests
+-------+-----------------------------------------------------------------------------------------
+1-6    | Tests the invalid command line
+-------+-----------------------------------------------------------------------------------------
+7-9    | Tests that valid commands base case
+-------+-----------------------------------------------------------------------------------------
+10-12  | Tests the implementation no blocks
+-------+-----------------------------------------------------------------------------------------
+13     | Tests the implementation of block & unblock
+-------+-----------------------------------------------------------------------------------------
+14     | Tests the implementation of start at the same time / barging
+-------+-----------------------------------------------------------------------------------------
+15-16  | Tests the implementation of wait / active the group
+-------+-----------------------------------------------------------------------------------------
+
+
+-------+--------------+-----------------------------+--------------------------------------------
+Test # | Type of Test | command                     | Reason for Test                            
+-------+--------------+-----------------------------+--------------------------------------------
+1      | incorrect #  | ./vote  1 1 1 1             | Incorrect # of command line argument passed
+       | of arguments | ./vote  1 1                 | cerr invalid Usage                         
+-------+--------------+-----------------------------+--------------------------------------------
+2      | incorrect    | ./vote x 1 1                | Incorrect arguments parse                  
+       | arguments    |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+3      | incorrect    | ./vote -1 1 1               | Incorrect arguments V value                
+       | arguments    | ./vote 0 1 1                |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+4      | incorrect    | ./vote 1 -1 1               | Incorrect arguments G value                
+       | arguments    | ./vote 1 0 1                |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+5      | incorrect    | ./vote 1 1 -1               | Incorrect arguments Seed value             
+       | arguments    | ./vote 1 1 0                |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+6      | incorrect    | ./vote 3 2 1                | Incorrect arguments V not divided by G     
+       | arguments    | ./vote 3 4 1                |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+7      | base valid   | ./vote 1 1 1                | Correct base case arguments                
+       | arguments    | ./vote                      |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+8      | 1 person     | ./vote 1 1 1                | single people, single tourist:             
+       | 1 tourist    |                             | start, vote, complete, finish(highest vote)
+-------+--------------+-----------------------------+--------------------------------------------
+9      | multi people | ./vote 12 1 1               | multi people, single tourist:              
+       | 1 tourist    |                             | all group must go as 1 person, and 1 by 1  
+-------+--------------+-----------------------------+--------------------------------------------
+10     | multi people | ./vote 12 4 1               | multi people, single tourist:              
+       | multi tourist|                             | Many things happen here                    
+-------+--------------+-----------------------------+--------------------------------------------
+11     | no block &   | ./vote 12 4 1               | after a person start and vote, no block for
+       | finish &     |                             | him, but will NOT go the first choice place
+       | NOT prefer   |                             | S  ->  V 1,0,2  ->  C  ->  F p             
+-------+--------------+-----------------------------+--------------------------------------------
+12     | no block &   | ./vote 12 4 2               | after a person start and vote, no block for
+       | finish &     |                             | him, but will go to the first choice place 
+       | prefer       |                             | S  ->  V 2,0,1  ->  C  ->  F p             
+-------+--------------+-----------------------------+--------------------------------------------
+13     | block &      | ./vote 12 4 1               | after a person start and vote, he will be  
+       | unblock      |                             | block, and will get unblocked later        
+       |              |                             | S  ->  V 0,1,2  ->  B 1  ->  U 2  ->  F p  
+-------+--------------+-----------------------------+--------------------------------------------
+14     | multi people | ./vote 6 3 16219            | Multi people start at the same time        
+       | start at the |                             | and barging                                
+       | same time    |                             | S     S                                    
+-------+--------------+-----------------------------+--------------------------------------------
+15     | group not    | ./vote 44 4 1               | Group not filled yet, wait for other people
+       | filled, wait |                             | all come, then go together                 
+       | for filled   |                             |                                            
+-------+--------------+-----------------------------+--------------------------------------------
+16     | last person  | ./vote 44 4 1               | Group will filled by the last person, and  
+       | fill the     |                             | go (print).                               
+       | group & go   |                             |                                            
