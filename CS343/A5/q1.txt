@@ -1,0 +1,27 @@
+a)
+	run command: /usr/bin/time -f "%Uu %Ss %E" ./a.out 4000000000
+	without -DPAD
+		0x644c10 0x644c08 0x644c00 0x644bf8 
+		4000000000
+		4000000000
+		47.00u 0.07s 0:23.62
+	with -DPAD
+		0x644cc0 0x644c80 0x644c40 0x644c00 
+		4000000000
+		4000000000
+		18.04u 0.01s 0:09.08
+
+b)
+	without -DPAD, it takes about 2.6 times run time compare to with -DPAD option.
+	Difference:
+		47.00u - 18.04u = 28.96u
+		0:23.62 - 0:09.08 = 0:14.54
+		47.00u / 18.04u = 2.60532151
+		0:23.62 / 0:09.08 = 2.60132159
+	Since with/without -DPAD option, memory location of the counters are in different cache lines. Therefore the runtime is different
+
+c)
+	Since its on the stack, so the order of addresses of the global variables should be in descending order.
+
+d)
+	The reason for "void * cast before each counter when printing their address" is that we want to print those pointer in hexadecimal representation. The "void *" allows us to print in hexadecimal representation.

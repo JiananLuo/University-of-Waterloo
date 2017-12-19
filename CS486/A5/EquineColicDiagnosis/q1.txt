@@ -1,0 +1,31 @@
+2. (20 points) Picture of the decision tree. Hand drawn and then scanned is fine.
+                           Endotoxin
+                 <13.425  /         \ >=13.425
+                         /           \
+                        /             \
+                       K               \
+                <3.55 / \ >=3.55        \
+                     /   \               \
+                    /     \               \
+                   /       \               \
+                  /         \               \
+                 /           \               \
+                /             \               \
+               /               \               \
+              /                 \               \
+             /                   \               \
+            Na                  GLDH              \
+    <141.5 /  \ >=141.5  <24.65 /  \ >=24.65       \
+          /    \               /    \               \
+         /      \             /      \               \
+      Colic   Healthy     Healthy   Colic           Colic
+
+
+3. (5 points) Answer the question “How many of the training instances does the tree classify correctly?”
+	The decision tree classify all the training instances correctly.
+
+4. (5 points) Answer to the question “How many of the test instances does the tree classify correctly?”
+	The decision tree classify all the test instances correctly.
+
+5. (5 points) Description of how you used the information metric.
+	Information metric helps us to reduce the attributes that are not that correlated to what we care about (in this question healthy/colin of a horse). We can plot the attribute on the decision tree without unnecessary entropy by using the information metric. So, basically, we use the information metric to decide how to plot the decision tree, the data, and indecate which attribute should be in which node.
